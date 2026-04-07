@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="topbar">
+<h2>Dashboard</h2>
+<a href="/logout" class="logout-btn">Logout</a>
+</div>
+
+<div class="cards">
+<div class="card"><h3>{{ total_qty }}</h3><p>Total Stock</p></div>
+<div class="card"><h3>₹ {{ total_value }}</h3><p>Total Value</p></div>
+<div class="card"><h3>{{ items|length }}</h3><p>Products</p></div>
+</div>
+
+<div class="form-box">
+<h3>Add Product</h3>
+
+<form action="/add" method="POST">
+<div class="form-row">
+<input name="name" placeholder="Name">
+<select name="category">
+{% for cat in categories %}
+<option value="{{cat.id}}">{{cat.name}}</option>
+{% endfor %}
+</select>
+</div>
+
+<div class="form-row">
+<input name="quantity" placeholder="Quantity">
+<input name="price" placeholder="Price">
+</div>
+
+<button class="btn-primary">Add Product</button>
+</form>
+</div>
+
+<div class="table-box">
+<table>
+<tr>
+<th>Name</th><th>Category</th><th>Qty</th><th>Price</th><th>Action</th>
+</tr>
+
+{% for item in items %}
+<tr>
+<td>{{item.name}}</td>
+<td>{{item.category}}</td>
+<td>{{item.quantity}}</td>
+<td>{{item.price}}</td>
+
+<td>
+
+<button class="btn-edit"
+data-id="{{item.id}}"
+data-name="{{item.name}}"
+data-cat="{{item.category_id}}"
+data-qty="{{item.quantity}}"
+data-price="{{item.price}}">
+Edit
+</button>
+
+<a href="/delete/{{item.id}}" class="btn-delete">Delete</a>
+</td>
+</tr>
+{% endfor %}
+</table>
+</div>
+
+</div>
+
+<!-- MODAL -->
+<div id="modal" class="modal">
+<div class="modal-content">
+
+<h2>Edit Product</h2>
+
+<form id="editForm" method="POST" class="modal-form">
+<input id="ename" name="name">
+<input id="eqty" name="quantity">
+<input id="eprice" name="price">
+
+<select id="ecat" name="category">
+{% for cat in categories %}
+<option value="{{cat.id}}">{{cat.name}}</option>
+{% endfor %}
+</select>
+
+<div class="modal-actions">
+<button class="btn-primary">Update</button>
+<button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+</div>
+
+</form>
+
+</div>
+</div>
+
+<script>
+document.querySelectorAll(".btn-edit").forEach(btn => {
+    btn.addEventListener("click", function(){
+
+        let id = this.dataset.id;
+        let name = this.dataset.name;
+        let cat = this.dataset.cat;
+        let qty = this.dataset.qty;
+        let price = this.dataset.price;
+
+        console.log("Clicked:", id);
+
+        document.getElementById("modal").style.display = "flex";
+        document.getElementById("editForm").action = "/update/" + id;
+
+        document.getElementById("ename").value = name;
+        document.getElementById("eqty").value = qty;
+        document.getElementById("eprice").value = price;
+        document.getElementById("ecat").value = cat;
+    });
+});
+
+function closeModal(){
+    document.getElementById("modal").style.display = "none";
+}
+</script>
+
+</body>
+</html>

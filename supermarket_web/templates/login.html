@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <div class="login-card">
+
+        <h2>Supermarket</h2>
+        <p class="subtitle">Admin Login</p>
+
+        <form method="POST">
+
+            <div class="input-box">
+                <input name="username" placeholder="Username">
+            </div>
+
+            <div class="input-box password-box">
+                <input id="password" name="password" type="password" placeholder="Password">
+                <span onclick="togglePassword()" class="eye">👁</span>
+            </div>
+
+            <button class="btn-primary">Login</button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+function togglePassword(){
+    let p = document.getElementById("password");
+    p.type = p.type === "password" ? "text" : "password";
+}
+</script>
+
+</body>
+</html>
